@@ -23,31 +23,47 @@
   <noscript><div class="file-help">This quiz needs JavaScript. Save the file, then open it in Safari or Chrome instead of the message preview.</div></noscript>
 <div id="packet-map-quiz">
   <style>
-    #packet-map-quiz{font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--foreground);padding:6px 0}
+    #packet-map-quiz{font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--foreground);max-width:1180px;margin:0 auto;padding:10px;--panel:color-mix(in srgb,var(--background) 94%,var(--viz-series-2));--panel-strong:color-mix(in srgb,var(--background) 88%,var(--viz-series-2));--accent:var(--viz-series-2);--radius:14px}
     #packet-map-quiz *{box-sizing:border-box}
-    #packet-map-quiz .top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:8px}
-    #packet-map-quiz h2{font-size:17px;line-height:1.2;margin:0}
-    #packet-map-quiz .controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-    #packet-map-quiz button,#packet-map-quiz select{font:inherit;color:var(--foreground);background:var(--background);border:1px solid var(--border);border-radius:7px;padding:6px 9px}
-    #packet-map-quiz button{cursor:pointer}
-    #packet-map-quiz button[aria-pressed="true"]{border-color:var(--viz-series-2);box-shadow:inset 0 0 0 1px var(--viz-series-2);font-weight:750}
-    #packet-map-quiz .prompt{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:46px;margin-bottom:7px;padding:7px 10px;border:1px solid var(--border);border-radius:8px}
-    #packet-map-quiz .ask{font-size:15px;font-weight:720}
-    #packet-map-quiz .score{font-size:12px;color:var(--muted-foreground);white-space:nowrap}
-    #packet-map-quiz .insights{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:-1px 2px 7px;font-size:12px;color:var(--muted-foreground)}
-    #packet-map-quiz .accuracy{font-weight:750;color:var(--foreground)}
-    #packet-map-quiz .level{font-weight:750;color:var(--viz-series-2)}
-    #packet-map-quiz .answer-panel{display:none;margin:0 0 7px}
+    #packet-map-quiz .top{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:12px}
+    #packet-map-quiz .title-block{min-width:0}
+    #packet-map-quiz h2{font-size:clamp(20px,2.4vw,28px);line-height:1.08;letter-spacing:-.025em;margin:0}
+    #packet-map-quiz .subtitle{max-width:62ch;margin:6px 0 0;color:var(--muted-foreground);font-size:13px;line-height:1.4}
+    #packet-map-quiz button,#packet-map-quiz select,#packet-map-quiz input{font:inherit;color:var(--foreground);background:var(--background);border:1px solid var(--border);border-radius:10px}
+    #packet-map-quiz button{cursor:pointer;min-height:38px;padding:8px 12px;font-weight:650;transition:transform .12s ease,border-color .16s ease,background-color .16s ease,color .16s ease,box-shadow .16s ease}
+    #packet-map-quiz button:hover{border-color:color-mix(in srgb,var(--accent) 65%,var(--border));background:color-mix(in srgb,var(--accent) 7%,var(--background))}
+    #packet-map-quiz button:active{transform:translateY(1px)}
+    #packet-map-quiz button:focus-visible,#packet-map-quiz select:focus-visible,#packet-map-quiz input:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 35%,transparent);outline-offset:2px}
+    #packet-map-quiz .shuffle{flex:none;color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,var(--border));background:color-mix(in srgb,var(--accent) 7%,var(--background))}
+    #packet-map-quiz .shuffle.shuffled{background:var(--accent);border-color:var(--accent);color:#f8fbff}
+    #packet-map-quiz .control-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:10px;margin-bottom:10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel)}
+    #packet-map-quiz .mode-scroller{min-width:0;overflow-x:auto;scrollbar-width:none}
+    #packet-map-quiz .mode-scroller::-webkit-scrollbar{display:none}
+    #packet-map-quiz .modes{display:flex;gap:5px;width:max-content}
+    #packet-map-quiz .mode-btn{min-width:78px;background:transparent}
+    #packet-map-quiz .mode-btn[aria-pressed="true"]{color:#f8fbff;background:var(--accent);border-color:var(--accent);box-shadow:0 4px 12px color-mix(in srgb,var(--accent) 23%,transparent)}
+    #packet-map-quiz .set-control{display:flex;align-items:center;gap:8px;color:var(--muted-foreground);font-size:12px;font-weight:700;white-space:nowrap}
+    #packet-map-quiz select{min-height:38px;padding:7px 32px 7px 10px}
+    #packet-map-quiz .mode-help{grid-column:1/-1;margin:0 2px;color:var(--muted-foreground);font-size:12px;line-height:1.35}
+    #packet-map-quiz .prompt{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:58px;margin-bottom:8px;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--background)}
+    #packet-map-quiz .ask{font-size:clamp(16px,2vw,20px);font-weight:780;letter-spacing:-.012em}
+    #packet-map-quiz .score{font-size:12px;color:var(--muted-foreground);white-space:nowrap;text-align:right}
+    #packet-map-quiz .insights{display:grid;grid-template-columns:auto auto minmax(0,1fr);align-items:center;gap:8px 16px;margin-bottom:8px;padding:8px 12px;border-radius:12px;background:var(--panel);font-size:12px;color:var(--muted-foreground)}
+    #packet-map-quiz .accuracy{font-weight:760;color:var(--foreground)}
+    #packet-map-quiz .level{font-weight:760;color:var(--accent)}
+    #packet-map-quiz .weakest{text-align:right}
+    #packet-map-quiz .answer-panel{display:none;margin:0 0 8px;padding:10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel)}
     #packet-map-quiz.show-choices .answer-panel,#packet-map-quiz.show-recall .answer-panel{display:block}
-    #packet-map-quiz .choices{display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+    #packet-map-quiz .choices{display:none;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
     #packet-map-quiz.show-choices .choices{display:grid}
-    #packet-map-quiz .choices button{text-align:left;min-height:38px}
-    #packet-map-quiz .choices button.wrong{opacity:.45;text-decoration:line-through}
-    #packet-map-quiz .choices button.correct-choice{border-color:var(--viz-series-3);box-shadow:inset 0 0 0 1px var(--viz-series-3)}
-    #packet-map-quiz .recall-form{display:none;gap:6px}
+    #packet-map-quiz .choices button{text-align:left;min-height:44px;background:var(--background)}
+    #packet-map-quiz .choices button.wrong{opacity:.48;text-decoration:line-through}
+    #packet-map-quiz .choices button.correct-choice{border-color:var(--viz-series-3);background:color-mix(in srgb,var(--viz-series-3) 12%,var(--background));box-shadow:inset 0 0 0 1px var(--viz-series-3)}
+    #packet-map-quiz .recall-form{display:none;gap:8px}
     #packet-map-quiz.show-recall .recall-form{display:flex}
-    #packet-map-quiz .recall-form input{min-width:0;flex:1;font:inherit;color:var(--foreground);background:var(--background);border:1px solid var(--border);border-radius:7px;padding:8px 10px}
-    #packet-map-quiz .map-wrap{position:relative;border:1px solid var(--border);border-radius:9px;overflow:hidden;background:color-mix(in srgb,var(--viz-series-2) 5%,transparent)}
+    #packet-map-quiz .recall-form input{min-width:0;flex:1;padding:10px 12px;background:var(--background)}
+    #packet-map-quiz .recall-form button{color:#f8fbff;background:var(--accent);border-color:var(--accent)}
+    #packet-map-quiz .map-wrap{position:relative;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:color-mix(in srgb,var(--viz-series-2) 7%,var(--background));box-shadow:0 12px 32px color-mix(in srgb,var(--viz-series-2) 10%,transparent)}
     #packet-map-quiz svg{display:block;width:100%;height:auto;touch-action:manipulation;cursor:crosshair}
     #packet-map-quiz .country{fill:color-mix(in srgb,var(--foreground) 7%,transparent);stroke:var(--border);stroke-width:1.2}
     #packet-map-quiz .state-lines{fill:none;stroke:color-mix(in srgb,var(--foreground) 24%,transparent);stroke-width:.6}
@@ -62,22 +78,36 @@
     #packet-map-quiz .feature.active{opacity:1!important;stroke:var(--viz-series-1)!important;stroke-width:8!important;fill:color-mix(in srgb,var(--viz-series-1) 35%,transparent)!important}
     #packet-map-quiz .feature.correct{opacity:1;stroke:var(--viz-series-3)!important;stroke-width:8!important;fill:color-mix(in srgb,var(--viz-series-3) 40%,transparent)!important}
     #packet-map-quiz .map-label{font-size:12px;font-weight:750;fill:var(--foreground);paint-order:stroke;stroke:var(--background);stroke-width:4px;stroke-linejoin:round;pointer-events:none}
-    #packet-map-quiz .feedback{min-height:32px;display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:7px;font-size:13px;color:var(--muted-foreground)}
-    #packet-map-quiz .nav{display:flex;gap:6px}
+    #packet-map-quiz .feedback{min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px;padding:8px 10px 8px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel);font-size:13px;line-height:1.35;color:var(--muted-foreground)}
+    #packet-map-quiz .message{max-width:72ch}
+    #packet-map-quiz .nav{display:flex;gap:7px;flex:none}
+    #packet-map-quiz .nav .next{color:#f8fbff;background:var(--accent);border-color:var(--accent)}
     #packet-map-quiz .learn-only{display:none}
     #packet-map-quiz.learn .learn-only{display:inline-block}
     #packet-map-quiz.learn .quiz-only{display:none}
     #packet-map-quiz .loading{position:absolute;inset:0;display:grid;place-items:center;background:var(--background);font-size:13px;color:var(--muted-foreground)}
-    @media(max-width:620px){#packet-map-quiz .top{align-items:flex-start}#packet-map-quiz .controls{width:100%}#packet-map-quiz .mode-btn{flex:1;padding-inline:5px}#packet-map-quiz select{flex:1;min-width:130px}#packet-map-quiz .prompt{align-items:flex-start;flex-direction:column;gap:3px}#packet-map-quiz .ask{font-size:14px}#packet-map-quiz .weakest{width:100%}#packet-map-quiz .choices{grid-template-columns:1fr}}
+    @media(max-width:720px){body{padding:8px;padding-left:max(8px,env(safe-area-inset-left));padding-right:max(8px,env(safe-area-inset-right))}#packet-map-quiz{padding:4px 0 10px}#packet-map-quiz .top{align-items:center}#packet-map-quiz .subtitle{font-size:12px}#packet-map-quiz .shuffle{padding-inline:10px}#packet-map-quiz .control-panel{grid-template-columns:1fr;padding:8px}#packet-map-quiz .set-control{justify-content:space-between}#packet-map-quiz select{flex:1;max-width:220px}#packet-map-quiz .prompt{align-items:flex-start;flex-direction:column;gap:3px;padding:9px 11px}#packet-map-quiz .score{text-align:left;white-space:normal}#packet-map-quiz .insights{grid-template-columns:1fr 1fr}#packet-map-quiz .weakest{grid-column:1/-1;text-align:left}#packet-map-quiz .choices{grid-template-columns:1fr}#packet-map-quiz .feedback{align-items:flex-start;flex-direction:column;padding:10px}#packet-map-quiz .nav{width:100%}#packet-map-quiz .nav button{flex:1}#packet-map-quiz .map-wrap{border-radius:12px}}
+    @media(max-width:420px){#packet-map-quiz .top{align-items:flex-start}#packet-map-quiz h2{font-size:20px}#packet-map-quiz .subtitle{max-width:28ch}#packet-map-quiz .shuffle{font-size:12px;min-height:36px}#packet-map-quiz .mode-btn{min-width:72px}}
+    @media(prefers-reduced-motion:reduce){#packet-map-quiz button,#packet-map-quiz .feature{transition:none}}
   </style>
   <div class="top">
-    <h2>U.S.–Canada physical map practice</h2>
-    <div class="controls">
-      <button class="mode-btn" data-mode="learn" type="button" aria-pressed="true">Learn</button>
-      <button class="mode-btn" data-mode="adaptive" type="button" aria-pressed="false">Adaptive</button>
-      <button class="mode-btn" data-mode="locate" type="button" aria-pressed="false">Locate</button>
-      <button class="mode-btn" data-mode="identify" type="button" aria-pressed="false">Identify</button>
-      <button class="mode-btn" data-mode="recall" type="button" aria-pressed="false">Recall</button>
+    <div class="title-block">
+      <h2>U.S. and Canada physical map practice</h2>
+      <p class="subtitle">Learn the 33 physical features from your packet, then switch modes to test yourself.</p>
+    </div>
+    <button class="shuffle" type="button" aria-label="Shuffle the remaining feature order">Shuffle order</button>
+  </div>
+  <div class="control-panel">
+    <div class="mode-scroller">
+      <div class="modes" role="group" aria-label="Practice mode">
+        <button class="mode-btn" data-mode="learn" type="button" aria-pressed="true">Learn</button>
+        <button class="mode-btn" data-mode="adaptive" type="button" aria-pressed="false">Adaptive</button>
+        <button class="mode-btn" data-mode="locate" type="button" aria-pressed="false">Locate</button>
+        <button class="mode-btn" data-mode="identify" type="button" aria-pressed="false">Identify</button>
+        <button class="mode-btn" data-mode="recall" type="button" aria-pressed="false">Recall</button>
+      </div>
+    </div>
+    <label class="set-control"><span>Practice set</span>
       <select aria-label="Choose feature category">
         <option value="all">All 33 features</option>
         <option value="Land">Land</option>
@@ -86,9 +116,10 @@
         <option value="Water">Water bodies</option>
         <option value="weak">Weak parts</option>
       </select>
-    </div>
+    </label>
+    <p class="mode-help">Learn shows each name and location. Switch modes when you are ready.</p>
   </div>
-  <div class="prompt">
+  <div class="prompt" aria-live="polite">
     <div class="ask">Loading map…</div>
     <div class="score"></div>
   </div>
@@ -96,12 +127,12 @@
     <div class="choices" role="group" aria-label="Answer choices"></div>
     <form class="recall-form"><input aria-label="Type the feature name" autocomplete="off" placeholder="Type the full feature name…"><button type="submit">Check</button></form>
   </div>
-  <div class="insights"><span class="accuracy">Round accuracy: ready</span><span class="level">Level 1 · Explorer</span><span class="weakest">Weak parts will appear after you practice.</span></div>
+  <div class="insights"><span class="accuracy">Round accuracy: ready</span><span class="level">Level 1: Explorer (0/33 mastered)</span><span class="weakest">Weak parts will appear after you practice.</span></div>
   <div class="map-wrap">
     <svg viewBox="0 0 760 520" role="img" aria-label="Interactive physical map of the United States and Canada"></svg>
     <div class="loading">Loading North America map…</div>
   </div>
-  <div class="feedback">
+  <div class="feedback" aria-live="polite">
     <span class="message">Learn mode shows each feature clearly.</span>
     <div class="nav">
       <button class="learn-only previous" type="button">Previous</button>
@@ -185,6 +216,7 @@
     const ask=root.querySelector('.ask'),score=root.querySelector('.score'),message=root.querySelector('.message');
     const accuracyEl=root.querySelector('.accuracy'),levelEl=root.querySelector('.level'),weakestEl=root.querySelector('.weakest');
     const category=root.querySelector('select'),modeButtons=[...root.querySelectorAll('.mode-btn')];
+    const modeHelp=root.querySelector('.mode-help'),shuffleButton=root.querySelector('.shuffle');
     const choicesEl=root.querySelector('.choices'),recallForm=root.querySelector('.recall-form'),recallInput=recallForm.querySelector('input');
     let mode='learn',taskMode='learn',deck=[],position=0,correct=0,attempts=0,streak=0,locked=false;
     const storageKey='us-canada-map-progress-v1';
@@ -201,9 +233,9 @@
       const totals=features.reduce((a,f)=>{const s=stat(f);a.guesses+=s.guesses;a.correct+=s.correct;return a;},{guesses:0,correct:0});
       accuracyEl.textContent=attempts?`Round accuracy: ${Math.round(100*correct/attempts)}% (${correct}/${attempts})`:'Round accuracy: ready';
       const level=[...levels].reverse().find(l=>meta().xp>=l.xp),levelNumber=levels.indexOf(level)+1,masteredCount=features.filter(mastered).length;
-      levelEl.textContent=`Level ${levelNumber} · ${level.n} · ${masteredCount}/33 mastered`;
+      levelEl.textContent=`Level ${levelNumber}: ${level.n} (${masteredCount}/33 mastered)`;
       const weak=weakRank().slice(0,3);
-      weakestEl.textContent=weak.length?`Focus on: ${weak.map(f=>f.n).join(' · ')}`:(totals.guesses?'No weak parts yet—nice work.':'Weak parts will appear after you practice.');
+      weakestEl.textContent=weak.length?`Focus on: ${weak.map(f=>f.n).join(', ')}`:(totals.guesses?'No weak parts yet. Nice work.':'Weak parts will appear after you practice.');
     };
     const current=()=>deck[position];
     const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
@@ -218,7 +250,7 @@
       'Sierra Nevada Mountains':'The Sierra Nevada runs along eastern California, beside Nevada.',
       'Mississippi River':'The Mississippi is the central north-to-south river flowing to the Gulf of Mexico.',
       'Missouri River':'The Missouri approaches the Mississippi from the west.',
-      'Ohio River':'The Ohio flows west along the Kentucky–Ohio region into the Mississippi.',
+      'Ohio River':'The Ohio flows west along the Kentucky-Ohio region into the Mississippi.',
       'St. Lawrence River':'The St. Lawrence carries Great Lakes water northeast to the Atlantic.',
       'Columbia River':'The Columbia reaches the Pacific between Washington and Oregon.',
       'Yukon River':'The Yukon crosses the far northwest through Yukon and Alaska.',
@@ -241,7 +273,7 @@
       clear();
       const f=current();if(!f)return;
       taskMode=mode==='adaptive'?adaptiveTask(f):mode;
-      score.textContent=mode==='learn'?`${position+1} of ${deck.length}`:`${position+1}/${deck.length} · ${correct} correct · 🔥 ${streak}`;
+      score.textContent=mode==='learn'?`Feature ${position+1} of ${deck.length}`:`Question ${position+1} of ${deck.length} | ${correct} correct | streak ${streak}`;
       if(taskMode==='learn'){
         ask.textContent=f.n;f.el.classList.add('active');const p=center(f);label.attr('x',p[0]).attr('y',p[1]-18).text(f.n).style('display',null);message.textContent=tip(f);
       }else if(taskMode==='identify'){
@@ -253,14 +285,14 @@
       }
       updateInsights();
     };
-    const advance=()=>{position++;locked=false;if(position>=deck.length){const finishedCorrect=correct,finishedAttempts=attempts;ask.textContent='Round complete!';score.textContent=`${finishedCorrect}/${deck.length} correct · ${finishedAttempts?Math.round(100*finishedCorrect/finishedAttempts):0}% accuracy · best streak ${meta().bestStreak}`;message.textContent='Round accuracy has reset. Your weak-part learning history is still saved.';correct=0;attempts=0;streak=0;clear();updateInsights();}else showCurrent();};
+    const advance=()=>{position++;locked=false;if(position>=deck.length){const finishedCorrect=correct,finishedAttempts=attempts;ask.textContent='Round complete!';score.textContent=`${finishedCorrect}/${deck.length} correct | ${finishedAttempts?Math.round(100*finishedCorrect/finishedAttempts):0}% accuracy | best streak ${meta().bestStreak}`;message.textContent='Round accuracy has reset. Your weak-part learning history is still saved.';correct=0;attempts=0;streak=0;clear();updateInsights();}else showCurrent();};
     const answer=(isCorrect,answerButton)=>{
       if(locked||mode==='learn')return;
       const f=current(),history=stat(f);attempts++;history.guesses++;
       if(isCorrect){
-        locked=true;correct++;streak++;history.correct++;meta().bestStreak=Math.max(meta().bestStreak,streak);meta().xp+=10+Math.min(10,streak*2)+(taskMode==='recall'?6:taskMode==='locate'?3:0);saveProgress();updateInsights();f.el.classList.add('correct');if(answerButton)answerButton.classList.add('correct-choice');message.textContent=`Correct — ${f.n}. ${tip(f)}`;score.textContent=`${position+1}/${deck.length} · ${correct} correct · 🔥 ${streak}`;setTimeout(advance,1050);
+        locked=true;correct++;streak++;history.correct++;meta().bestStreak=Math.max(meta().bestStreak,streak);meta().xp+=10+Math.min(10,streak*2)+(taskMode==='recall'?6:taskMode==='locate'?3:0);saveProgress();updateInsights();f.el.classList.add('correct');if(answerButton)answerButton.classList.add('correct-choice');message.textContent=`Correct: ${f.n}. ${tip(f)}`;score.textContent=`Question ${position+1} of ${deck.length} | ${correct} correct | streak ${streak}`;setTimeout(advance,1050);
       }else{
-        streak=0;saveProgress();updateInsights();if(answerButton){answerButton.classList.add('wrong');answerButton.disabled=true;}message.textContent='Not quite—try again. This feature is now scheduled for extra practice.';score.textContent=`${position+1}/${deck.length} · ${correct} correct · 🔥 0`;
+        streak=0;saveProgress();updateInsights();if(answerButton){answerButton.classList.add('wrong');answerButton.disabled=true;}message.textContent='Not quite. Try again. This feature is now scheduled for extra practice.';score.textContent=`Question ${position+1} of ${deck.length} | ${correct} correct | streak 0`;
       }
     };
     const reset=()=>{
@@ -268,8 +300,20 @@
       const pool=category.value==='weak'?(rankedWeak.length?rankedWeak.slice(0,10):features):features.filter(f=>category.value==='all'||f.c===category.value);
       deck=mode==='learn'?pool:shuffle(pool).sort((a,b)=>weakness(b)-weakness(a));position=0;correct=0;attempts=0;streak=0;locked=false;showCurrent();
     };
+    const modeDescriptions={learn:'Learn shows each name and location. Use Previous and Next to move at your pace.',adaptive:'Adaptive chooses the right challenge for each feature based on your saved progress.',locate:'Locate gives you a name. Click its real position on the map.',identify:'Identify highlights a feature. Choose its correct name.',recall:'Recall highlights a feature. Type the full name from memory.'};
     const setMode=value=>{
-      mode=value;root.classList.remove('learn','adaptive','locate','identify','recall','practice');root.classList.add(mode);if(mode!=='learn')root.classList.add('practice');modeButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));reset();
+      mode=value;root.classList.remove('learn','adaptive','locate','identify','recall','practice');root.classList.add(mode);if(mode!=='learn')root.classList.add('practice');modeButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));modeHelp.textContent=modeDescriptions[mode];reset();
+    };
+    const shuffleDeck=()=>{
+      if(!deck.length)return;
+      if(position>=deck.length){deck=shuffle(deck.filter(Boolean));position=0;correct=0;attempts=0;streak=0;locked=false;showCurrent();message.textContent='New round started in a shuffled order.';return;}
+      const active=current();
+      const completed=deck.slice(0,position);
+      const remaining=shuffle(deck.slice(position+1));
+      deck=[...completed,active,...remaining];
+      message.textContent=remaining.length?`Order shuffled. ${remaining.length} features remain in a new order.`:'You are on the final feature. Start a new round to shuffle again.';
+      shuffleButton.classList.add('shuffled');shuffleButton.textContent='Shuffled';
+      setTimeout(()=>{shuffleButton.classList.remove('shuffled');shuffleButton.textContent='Shuffle order';},750);
     };
     const hit=(f,p)=>{if(f.xy)return Math.hypot(p[0]-f.xy[0],p[1]-f.xy[1])<=Math.max(27,f.r+17);if(f.k==='river')return f.samples.some(q=>Math.hypot(p[0]-q[0],p[1]-q[1])<=17);const lonlat=projection.invert(p);return lonlat?d3.geoContains(f.geom,lonlat):false;};
     svg.on('click',event=>{if(taskMode!=='locate'||locked)return;answer(hit(current(),d3.pointer(event,svg.node())));});
@@ -277,10 +321,12 @@
     recallForm.addEventListener('submit',event=>{event.preventDefault();checkRecall();});
     recallForm.querySelector('button').addEventListener('click',event=>{event.preventDefault();checkRecall();});
     modeButtons.forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+    shuffleButton.addEventListener('click',shuffleDeck);
     category.addEventListener('change',reset);
     root.querySelector('.next').addEventListener('click',()=>{position=(position+1)%deck.length;showCurrent();});
     root.querySelector('.previous').addEventListener('click',()=>{position=(position-1+deck.length)%deck.length;showCurrent();});
     root.querySelector('.hint').addEventListener('click',()=>{const f=current();f.el.classList.add('active');const p=center(f);label.attr('x',p[0]).attr('y',p[1]-18).text(f.n).style('display',null);message.textContent=`Answer: ${f.n}. ${tip(f)}`;streak=0;});
+    document.addEventListener('keydown',event=>{if(event.metaKey||event.ctrlKey||event.altKey||event.target.matches('input,select'))return;if(mode==='learn'&&event.key==='ArrowRight'){event.preventDefault();root.querySelector('.next').click();}if(mode==='learn'&&event.key==='ArrowLeft'){event.preventDefault();root.querySelector('.previous').click();}if(event.key.toLowerCase()==='s'){event.preventDefault();shuffleDeck();}});
     root.querySelector('.loading').remove();
     setMode('learn');
     window.addEventListener('message',event=>{const data=event.data;if(data?.type==='map-progress-data'&&data.key===storageKey&&data.progress){progress=data.progress;updateInsights();if(category.value==='weak')reset();}});
