@@ -29,6 +29,7 @@
     #packet-map-quiz .title-block{min-width:0}
     #packet-map-quiz h2{font-size:clamp(20px,2.4vw,28px);line-height:1.08;letter-spacing:-.025em;margin:0}
     #packet-map-quiz .subtitle{max-width:62ch;margin:6px 0 0;color:var(--muted-foreground);font-size:13px;line-height:1.4}
+    #packet-map-quiz .top-actions{display:flex;align-items:center;gap:7px;flex:none}
     #packet-map-quiz button,#packet-map-quiz select,#packet-map-quiz input{font:inherit;color:var(--foreground);background:var(--background);border:1px solid var(--border);border-radius:10px}
     #packet-map-quiz button{cursor:pointer;min-height:38px;padding:8px 12px;font-weight:650;transition:transform .12s ease,border-color .16s ease,background-color .16s ease,color .16s ease,box-shadow .16s ease}
     #packet-map-quiz button:hover{border-color:color-mix(in srgb,var(--accent) 65%,var(--border));background:color-mix(in srgb,var(--accent) 7%,var(--background))}
@@ -36,6 +37,7 @@
     #packet-map-quiz button:focus-visible,#packet-map-quiz select:focus-visible,#packet-map-quiz input:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 35%,transparent);outline-offset:2px}
     #packet-map-quiz .shuffle{flex:none;color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,var(--border));background:color-mix(in srgb,var(--accent) 7%,var(--background))}
     #packet-map-quiz .shuffle.shuffled{background:var(--accent);border-color:var(--accent);color:#f8fbff}
+    #packet-map-quiz .hover-toggle[aria-pressed="true"]{color:#f8fbff;background:var(--viz-series-3);border-color:var(--viz-series-3)}
     #packet-map-quiz .control-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;align-items:center;padding:10px;margin-bottom:10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel)}
     #packet-map-quiz .mode-scroller{min-width:0;overflow-x:auto;scrollbar-width:none}
     #packet-map-quiz .mode-scroller::-webkit-scrollbar{display:none}
@@ -77,7 +79,13 @@
     #packet-map-quiz .feature.water{fill:color-mix(in srgb,var(--viz-series-2) 9%,transparent);stroke:color-mix(in srgb,var(--viz-series-2) 35%,transparent);stroke-width:1;stroke-dasharray:3 3}
     #packet-map-quiz .feature.active{opacity:1!important;stroke:var(--viz-series-1)!important;stroke-width:8!important;fill:color-mix(in srgb,var(--viz-series-1) 35%,transparent)!important}
     #packet-map-quiz .feature.correct{opacity:1;stroke:var(--viz-series-3)!important;stroke-width:8!important;fill:color-mix(in srgb,var(--viz-series-3) 40%,transparent)!important}
+    #packet-map-quiz .feature.hovered:not(.active):not(.correct){opacity:1!important;stroke:var(--viz-series-6)!important;stroke-width:5!important;fill:color-mix(in srgb,var(--viz-series-6) 24%,transparent)!important}
+    #packet-map-quiz .feature.river.hovered:not(.active):not(.correct){fill:none!important;stroke-width:6!important}
     #packet-map-quiz .map-label{font-size:12px;font-weight:750;fill:var(--foreground);paint-order:stroke;stroke:var(--background);stroke-width:4px;stroke-linejoin:round;pointer-events:none}
+    #packet-map-quiz .hover-tooltip{position:absolute;z-index:2;display:flex;flex-direction:column;gap:1px;max-width:210px;padding:7px 9px;border:1px solid color-mix(in srgb,var(--viz-series-6) 50%,var(--border));border-radius:10px;background:color-mix(in srgb,var(--background) 94%,transparent);box-shadow:0 8px 24px color-mix(in srgb,var(--foreground) 16%,transparent);backdrop-filter:blur(10px);pointer-events:none;transform:translate(0,-50%)}
+    #packet-map-quiz .hover-tooltip[hidden]{display:none}
+    #packet-map-quiz .hover-name{font-size:13px;line-height:1.2;color:var(--foreground)}
+    #packet-map-quiz .hover-type{font-size:11px;color:var(--muted-foreground)}
     #packet-map-quiz .feedback{min-height:52px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px;padding:8px 10px 8px 14px;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel);font-size:13px;line-height:1.35;color:var(--muted-foreground)}
     #packet-map-quiz .message{max-width:72ch}
     #packet-map-quiz .nav{display:flex;gap:7px;flex:none}
@@ -86,8 +94,8 @@
     #packet-map-quiz.learn .learn-only{display:inline-block}
     #packet-map-quiz.learn .quiz-only{display:none}
     #packet-map-quiz .loading{position:absolute;inset:0;display:grid;place-items:center;background:var(--background);font-size:13px;color:var(--muted-foreground)}
-    @media(max-width:720px){body{padding:8px;padding-left:max(8px,env(safe-area-inset-left));padding-right:max(8px,env(safe-area-inset-right))}#packet-map-quiz{padding:4px 0 10px}#packet-map-quiz .top{align-items:center}#packet-map-quiz .subtitle{font-size:12px}#packet-map-quiz .shuffle{padding-inline:10px}#packet-map-quiz .control-panel{grid-template-columns:1fr;padding:8px}#packet-map-quiz .set-control{justify-content:space-between}#packet-map-quiz select{flex:1;max-width:220px}#packet-map-quiz .prompt{align-items:flex-start;flex-direction:column;gap:3px;padding:9px 11px}#packet-map-quiz .score{text-align:left;white-space:normal}#packet-map-quiz .insights{grid-template-columns:1fr 1fr}#packet-map-quiz .weakest{grid-column:1/-1;text-align:left}#packet-map-quiz .choices{grid-template-columns:1fr}#packet-map-quiz .feedback{align-items:flex-start;flex-direction:column;padding:10px}#packet-map-quiz .nav{width:100%}#packet-map-quiz .nav button{flex:1}#packet-map-quiz .map-wrap{border-radius:12px}}
-    @media(max-width:420px){#packet-map-quiz .top{align-items:flex-start}#packet-map-quiz h2{font-size:20px}#packet-map-quiz .subtitle{max-width:28ch}#packet-map-quiz .shuffle{font-size:12px;min-height:36px}#packet-map-quiz .mode-btn{min-width:72px}}
+    @media(max-width:720px){body{padding:8px;padding-left:max(8px,env(safe-area-inset-left));padding-right:max(8px,env(safe-area-inset-right))}#packet-map-quiz{padding:4px 0 10px}#packet-map-quiz .top{align-items:center}#packet-map-quiz .subtitle{font-size:12px}#packet-map-quiz .top-actions button{padding-inline:9px}#packet-map-quiz .control-panel{grid-template-columns:1fr;padding:8px}#packet-map-quiz .set-control{justify-content:space-between}#packet-map-quiz select{flex:1;max-width:220px}#packet-map-quiz .prompt{align-items:flex-start;flex-direction:column;gap:3px;padding:9px 11px}#packet-map-quiz .score{text-align:left;white-space:normal}#packet-map-quiz .insights{grid-template-columns:1fr 1fr}#packet-map-quiz .weakest{grid-column:1/-1;text-align:left}#packet-map-quiz .choices{grid-template-columns:1fr}#packet-map-quiz .feedback{align-items:flex-start;flex-direction:column;padding:10px}#packet-map-quiz .nav{width:100%}#packet-map-quiz .nav button{flex:1}#packet-map-quiz .map-wrap{border-radius:12px}}
+    @media(max-width:520px){#packet-map-quiz .top{align-items:flex-start;flex-direction:column;gap:9px}#packet-map-quiz .top-actions{width:100%}#packet-map-quiz .top-actions button{flex:1}#packet-map-quiz h2{font-size:20px}#packet-map-quiz .subtitle{max-width:none}#packet-map-quiz .mode-btn{min-width:72px}}
     @media(prefers-reduced-motion:reduce){#packet-map-quiz button,#packet-map-quiz .feature{transition:none}}
   </style>
   <div class="top">
@@ -95,7 +103,10 @@
       <h2>U.S. and Canada physical map practice</h2>
       <p class="subtitle">Learn the 33 physical features from your packet, then switch modes to test yourself.</p>
     </div>
-    <button class="shuffle" type="button" aria-label="Shuffle the remaining feature order">Shuffle order</button>
+    <div class="top-actions">
+      <button class="hover-toggle" type="button" aria-pressed="true">Hover labels: On</button>
+      <button class="shuffle" type="button" aria-label="Shuffle the remaining feature order">Shuffle order</button>
+    </div>
   </div>
   <div class="control-panel">
     <div class="mode-scroller">
@@ -130,6 +141,7 @@
   <div class="insights"><span class="accuracy">Round accuracy: ready</span><span class="level">Level 1: Explorer (0/33 mastered)</span><span class="weakest">Weak parts will appear after you practice.</span></div>
   <div class="map-wrap">
     <svg viewBox="0 0 760 520" role="img" aria-label="Interactive physical map of the United States and Canada"></svg>
+    <div class="hover-tooltip" role="status" hidden><strong class="hover-name"></strong><span class="hover-type"></span></div>
     <div class="loading">Loading North America map…</div>
   </div>
   <div class="feedback" aria-live="polite">
@@ -216,9 +228,10 @@
     const ask=root.querySelector('.ask'),score=root.querySelector('.score'),message=root.querySelector('.message');
     const accuracyEl=root.querySelector('.accuracy'),levelEl=root.querySelector('.level'),weakestEl=root.querySelector('.weakest');
     const category=root.querySelector('select'),modeButtons=[...root.querySelectorAll('.mode-btn')];
-    const modeHelp=root.querySelector('.mode-help'),shuffleButton=root.querySelector('.shuffle');
+    const modeHelp=root.querySelector('.mode-help'),shuffleButton=root.querySelector('.shuffle'),hoverToggle=root.querySelector('.hover-toggle');
     const choicesEl=root.querySelector('.choices'),recallForm=root.querySelector('.recall-form'),recallInput=recallForm.querySelector('input');
-    let mode='learn',taskMode='learn',deck=[],position=0,correct=0,attempts=0,streak=0,locked=false;
+    const mapWrap=root.querySelector('.map-wrap'),hoverTooltip=root.querySelector('.hover-tooltip'),hoverName=root.querySelector('.hover-name'),hoverType=root.querySelector('.hover-type');
+    let mode='learn',taskMode='learn',deck=[],position=0,correct=0,attempts=0,streak=0,locked=false,hoverLabels=true,hoveredFeature=null;
     const storageKey='us-canada-map-progress-v1';
     let progress={};
     try{progress=JSON.parse(localStorage.getItem(storageKey)||'{}')||{};}catch(e){progress={};}
@@ -316,12 +329,29 @@
       setTimeout(()=>{shuffleButton.classList.remove('shuffled');shuffleButton.textContent='Shuffle order';},750);
     };
     const hit=(f,p)=>{if(f.xy)return Math.hypot(p[0]-f.xy[0],p[1]-f.xy[1])<=Math.max(27,f.r+17);if(f.k==='river')return f.samples.some(q=>Math.hypot(p[0]-q[0],p[1]-q[1])<=17);const lonlat=projection.invert(p);return lonlat?d3.geoContains(f.geom,lonlat):false;};
+    const hoverHit=(f,p)=>{if(f.xy)return Math.hypot(p[0]-f.xy[0],p[1]-f.xy[1])<=Math.max(12,f.r+6);if(f.k==='river')return f.samples.some(q=>Math.hypot(p[0]-q[0],p[1]-q[1])<=9);const lonlat=projection.invert(p);return lonlat?d3.geoContains(f.geom,lonlat):false;};
+    const hoverPriority=f=>({point:6,river:5,lake:4,area:3,'land-region':2,water:1}[f.k]||0);
+    const featureType=f=>f.c==='Land'?'Land feature':f.c==='Water'?'Water body':f.c;
+    const clearHover=()=>{if(hoveredFeature)hoveredFeature.el.classList.remove('hovered');hoveredFeature=null;hoverTooltip.hidden=true;};
+    const showHover=event=>{
+      if(!hoverLabels)return clearHover();
+      const p=d3.pointer(event,svg.node());
+      const found=features.filter(f=>hoverHit(f,p)).sort((a,b)=>hoverPriority(b)-hoverPriority(a))[0];
+      if(!found)return clearHover();
+      if(hoveredFeature!==found){if(hoveredFeature)hoveredFeature.el.classList.remove('hovered');hoveredFeature=found;found.el.classList.add('hovered');hoverName.textContent=found.n;hoverType.textContent=featureType(found);hoverTooltip.hidden=false;}
+      const bounds=mapWrap.getBoundingClientRect(),tipWidth=Math.min(210,bounds.width-20);
+      const localX=event.clientX-bounds.left,localY=event.clientY-bounds.top;
+      const left=localX+tipWidth+24>bounds.width?Math.max(10,localX-tipWidth-14):localX+14;
+      hoverTooltip.style.left=`${left}px`;hoverTooltip.style.top=`${Math.max(26,Math.min(bounds.height-26,localY))}px`;
+    };
     svg.on('click',event=>{if(taskMode!=='locate'||locked)return;answer(hit(current(),d3.pointer(event,svg.node())));});
+    svg.on('pointermove',showHover).on('pointerleave',clearHover);
     const checkRecall=()=>{if(taskMode!=='recall'||locked)return;const normalize=s=>s.toLowerCase().replace(/saint/g,'st').replace(/[^a-z0-9]/g,'');answer(normalize(recallInput.value)===normalize(current().n));if(!locked)recallInput.select();};
     recallForm.addEventListener('submit',event=>{event.preventDefault();checkRecall();});
     recallForm.querySelector('button').addEventListener('click',event=>{event.preventDefault();checkRecall();});
     modeButtons.forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
     shuffleButton.addEventListener('click',shuffleDeck);
+    hoverToggle.addEventListener('click',()=>{hoverLabels=!hoverLabels;hoverToggle.setAttribute('aria-pressed',String(hoverLabels));hoverToggle.textContent=`Hover labels: ${hoverLabels?'On':'Off'}`;if(!hoverLabels)clearHover();message.textContent=hoverLabels?'Hover labels are on. Move across the map to preview each feature.':'Hover labels are off for a harder round.';});
     category.addEventListener('change',reset);
     root.querySelector('.next').addEventListener('click',()=>{position=(position+1)%deck.length;showCurrent();});
     root.querySelector('.previous').addEventListener('click',()=>{position=(position-1+deck.length)%deck.length;showCurrent();});
