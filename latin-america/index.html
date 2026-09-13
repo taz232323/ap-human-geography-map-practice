@@ -70,7 +70,7 @@
       #latin-map-quiz .map-tools .zoom-fit{min-width:48px}
       #latin-map-quiz .country-base{fill:color-mix(in srgb,var(--foreground) 7%,transparent);stroke:color-mix(in srgb,var(--foreground) 28%,var(--border));stroke-width:1}
       #latin-map-quiz .coastline-overlay{fill:none;stroke:color-mix(in srgb,var(--foreground) 68%,var(--border));stroke-width:1.75;stroke-linejoin:round;stroke-linecap:round;pointer-events:none;opacity:0;transition:opacity .15s}
-      #latin-map-quiz.physical-set .coastline-overlay{opacity:.92}
+      #latin-map-quiz.show-physical .coastline-overlay{opacity:.92}
       #latin-map-quiz .feature{pointer-events:none;opacity:.72;transition:opacity .15s,stroke-width .15s,fill .15s,stroke .15s}
       #latin-map-quiz.practice .feature{opacity:.055}
       #latin-map-quiz .feature.country{fill:color-mix(in srgb,var(--viz-series-4) 13%,transparent);stroke:var(--viz-series-4);stroke-width:1.2}
@@ -78,19 +78,19 @@
       #latin-map-quiz .feature.river{fill:none;stroke:var(--viz-series-2);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
       #latin-map-quiz .feature.lake{fill:color-mix(in srgb,var(--viz-series-2) 34%,transparent);stroke:var(--viz-series-2);stroke-width:1.4}
       #latin-map-quiz .feature.water{fill:color-mix(in srgb,var(--viz-series-2) 9%,transparent);stroke:color-mix(in srgb,var(--viz-series-2) 36%,transparent);stroke-width:1;stroke-dasharray:3 3}
-      #latin-map-quiz.physical-set .feature{opacity:.68}
-      #latin-map-quiz.physical-set .feature.land-region{fill:color-mix(in srgb,var(--viz-series-4) 10%,transparent);stroke-width:2.15}
-      #latin-map-quiz.physical-set .feature.river{stroke-width:3.5}
-      #latin-map-quiz.physical-set .feature.lake{fill:color-mix(in srgb,var(--viz-series-2) 16%,transparent);stroke-width:2.2}
-      #latin-map-quiz.physical-set .feature.water{fill:color-mix(in srgb,var(--viz-series-2) 4%,transparent);stroke:color-mix(in srgb,var(--viz-series-2) 68%,transparent);stroke-width:1.8}
+      #latin-map-quiz.show-physical .feature:not(.country){opacity:.68}
+      #latin-map-quiz.show-physical .feature.land-region{fill:color-mix(in srgb,var(--viz-series-4) 10%,transparent);stroke-width:2.15}
+      #latin-map-quiz.show-physical .feature.river{stroke-width:3.5}
+      #latin-map-quiz.show-physical .feature.lake{fill:color-mix(in srgb,var(--viz-series-2) 16%,transparent);stroke-width:2.2}
+      #latin-map-quiz.show-physical .feature.water{fill:color-mix(in srgb,var(--viz-series-2) 4%,transparent);stroke:color-mix(in srgb,var(--viz-series-2) 68%,transparent);stroke-width:1.8}
       #latin-map-quiz .feature.active{opacity:1!important;stroke:var(--viz-series-1)!important;stroke-width:7!important;fill:color-mix(in srgb,var(--viz-series-1) 35%,transparent)!important}
       #latin-map-quiz .feature.river.active{fill:none!important;stroke-width:8!important}
       #latin-map-quiz .feature.correct{opacity:1!important;stroke:var(--viz-series-3)!important;stroke-width:8!important;fill:color-mix(in srgb,var(--viz-series-3) 40%,transparent)!important}
       #latin-map-quiz .feature.river.correct{fill:none!important;stroke-width:9!important}
       #latin-map-quiz .feature.hovered:not(.active):not(.correct){opacity:1!important;stroke:var(--viz-series-6)!important;stroke-width:5!important;fill:color-mix(in srgb,var(--viz-series-6) 24%,transparent)!important}
       #latin-map-quiz .feature.river.hovered:not(.active):not(.correct){fill:none!important;stroke-width:6!important}
-      #latin-map-quiz.physical-set .feature.hovered:not(.active):not(.correct){filter:brightness(1.28) saturate(1.18);fill:color-mix(in srgb,var(--viz-series-6) 30%,transparent)!important;stroke:color-mix(in srgb,var(--viz-series-6) 82%,var(--foreground))!important}
-      #latin-map-quiz.physical-set .feature.river.hovered:not(.active):not(.correct){fill:none!important}
+      #latin-map-quiz.show-physical .feature.hovered:not(.active):not(.correct){filter:brightness(1.28) saturate(1.18);fill:color-mix(in srgb,var(--viz-series-6) 30%,transparent)!important;stroke:color-mix(in srgb,var(--viz-series-6) 82%,var(--foreground))!important}
+      #latin-map-quiz.show-physical .feature.river.hovered:not(.active):not(.correct){fill:none!important}
       #latin-map-quiz .map-label{font-size:13px;font-weight:750;fill:var(--foreground);paint-order:stroke;stroke:var(--background);stroke-width:4px;stroke-linejoin:round;pointer-events:none}
       #latin-map-quiz .guess-marker{fill:var(--background);stroke-width:4;pointer-events:none}
       #latin-map-quiz .guess-marker.right{stroke:var(--viz-series-3)}
@@ -340,7 +340,6 @@
         const showCurrent=()=>{
           clear();
           const f=current();if(!f)return;
-          root.classList.toggle('physical-set',f.category==='Physical');
           const desiredScene=sceneForFeature(f);
           if(renderedScene!==desiredScene)renderMap(currentPool(),desiredScene);
           taskMode=mode==='adaptive'?adaptiveTask(f):mode;
@@ -386,14 +385,17 @@
         const reset=()=>{
           clear();
           const pool=currentPool();
-          if(!pool.length){deck=[];root.classList.remove('physical-set');renderMap(features,'all');ask.textContent='No missed locations yet';score.textContent='Choose another set to begin';message.textContent='Incorrect answers will automatically appear in Practice missed locations.';updateRoundProgress(0);updateInsights();return;}
+          root.classList.toggle('show-physical',pool.some(f=>f.category==='Physical'));
+          if(!pool.length){deck=[];root.classList.remove('show-physical');renderMap(features,'all');ask.textContent='No missed locations yet';score.textContent='Choose another set to begin';message.textContent='Incorrect answers will automatically appear in Practice missed locations.';updateRoundProgress(0);updateInsights();return;}
           deck=mode==='learn'?[...pool]:shuffle(pool).sort((a,b)=>weakness(b)-weakness(a));
           renderMap(pool,sceneForFeature(deck[0]));
           position=0;correct=0;attempts=0;streak=0;locked=false;showCurrent();
         };
         const modeDescriptions={learn:'Study shows each labeled location. Use Previous and Next, or tap a visible feature.',adaptive:'Adaptive changes the challenge using your saved progress.',locate:'Locate gives you a name. Tap its geographically correct location.',identify:'Identify highlights a location. Choose its correct name.',recall:'Recall highlights a location. Type the full name from memory.'};
         const setMode=value=>{
+          if(setSelect.value==='all'&&value!=='learn')value='locate';
           mode=value;root.classList.remove('learn','adaptive','locate','identify','recall','practice');root.classList.add(mode);if(mode!=='learn')root.classList.add('practice');modeButtons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));modeHelp.textContent=modeDescriptions[mode];reset();
+          if(setSelect.value==='all'&&mode==='locate')modeHelp.textContent='All locations mixed keeps every physical feature visible and names the target in every prompt.';
         };
         const shuffleDeck=()=>{
           if(!deck.length)return;
@@ -448,7 +450,7 @@
         root.querySelector('.zoom-in').addEventListener('click',()=>changeZoom(zoomFactor+.25));
         root.querySelector('.zoom-out').addEventListener('click',()=>changeZoom(zoomFactor-.25));
         root.querySelector('.zoom-fit').addEventListener('click',()=>changeZoom(1));
-        setSelect.addEventListener('change',reset);
+        setSelect.addEventListener('change',()=>{if(setSelect.value==='all')setMode('locate');else reset();});
         root.querySelector('.next').addEventListener('click',()=>{if(deck.length){position=(position+1)%deck.length;showCurrent();}});
         root.querySelector('.previous').addEventListener('click',()=>{if(deck.length){position=(position-1+deck.length)%deck.length;showCurrent();}});
         root.querySelector('.hint').addEventListener('click',()=>{if(!locked&&current())answer(false,null,null,true);});
